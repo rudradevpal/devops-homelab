@@ -81,44 +81,5 @@ The setup is designed to provide:
 ### Service Communication
 ![Service Communication](assets/images/service.png)
 
-### Contributing:
-Contributions to DevOpsLab are welcome! Please refer to the CONTRIBUTING.md file in the repository for guidelines on how to contribute effectively.
-
 ### License:
 DevOpsLab Lab is licensed under the [MIT License](LICENSE.md). Please review the license file for more details.
-
-### Support:
-For support or inquiries, contact [email@example.com](mailto:email@example.com).
-
-### About:
-DevOpsLab is developed and maintained by [Your Organization Name]. Our mission is to empower organizations with efficient DevOps solutions to accelerate software delivery and innovation.
-
-### Version:
-Current Version: 1.0.0
-
-### Changelog:
-- Version 1.0.0:
-  - Initial release
-
-### Roadmap:
-- Version 1.1.0:
-  - Enhanced monitoring and logging features
-  - Improved scalability and performance optimizations
-- Version 1.2.0:
-  - Additional integrations with popular DevOps tools and cloud services
-  - Advanced security enhancements and compliance controls
-- Version 2.0.0:
-  - Major feature updates based on user feedback and requirements
-  - Compatibility improvements and bug fixes
-
-### How to Contribute:
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature/feature-name`).
-3. Make your changes and commit them (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature/feature-name`).
-5. Create a new Pull Request.
-
-
-apt install apache2-utils -y
-docker network rm devops-lab_docker_network > /dev/null 2>&1
-docker network create devops-lab_docker_network  --driver bridge --subnet=10.1.0.0/16
