@@ -1,0 +1,27 @@
+http:
+  routers:
+    ldap-ui:
+      rule: Host(`ldap.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: ldap-ui-service
+
+    ldap-ui-ssl:
+      rule: Host(`ldap.{{env "HOST_DOMAIN"}}`)
+      service: ldap-ui-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+
+  services:
+    ldap-ui-service:
+      loadBalancer:
+        servers:
+          - url: "http://phpldapadmin:80"

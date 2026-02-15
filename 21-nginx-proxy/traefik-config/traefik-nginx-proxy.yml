@@ -1,0 +1,27 @@
+http:
+  routers:
+    nginx-proxy:
+      rule: Host(`proxy.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: nginx-proxy-service
+
+    nginx-proxy-ssl:
+      rule: Host(`proxy.{{env "HOST_DOMAIN"}}`)
+      service: nginx-proxy-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+  services:
+    nginx-proxy-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.23:81"

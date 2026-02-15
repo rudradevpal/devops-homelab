@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  oidc-forward-auth:
+    container_name: oidc-forward-auth
+    image: thomseddon/traefik-forward-auth:2.2.0-arm
+    networks:
+      - devops-lab_docker_network
+    restart: unless-stopped
+    extra_hosts:
+      - "keycloak.devopslab.in:68.233.101.247"
+    environment:
+      - DEFAULT_PROVIDER=oidc
+      - PROVIDERS_OIDC_ISSUER_URL=${PROVIDERS_OIDC_ISSUER_URL}
+      - PROVIDERS_OIDC_CLIENT_ID=${PROVIDERS_OIDC_CLIENT_ID}
+      - PROVIDERS_OIDC_CLIENT_SECRET=${PROVIDERS_OIDC_CLIENT_SECRET}
+      - SECRET=${SECRET}
+      - INSECURE_COOKIE=${INSECURE_COOKIE}
+      - LOG_LEVEL=info
+
+networks:
+  devops-lab_docker_network:
+    external: true

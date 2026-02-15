@@ -1,0 +1,43 @@
+version: '3.7'
+services:
+  keycloak-postgres:
+    container_name: keycloak-postgres
+    image: postgres:16.4
+    restart: unless-stopped
+    volumes:
+      - /root/docker-storage/keycloak-postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    networks:
+      - devops-lab_docker_network
+
+  keycloak:
+    container_name: keycloak
+    image: quay.io/keycloak/keycloak:latest
+    restart: unless-stopped
+    environment:
+      - KC_DB_URL=jdbc:postgresql://keycloak-postgres/${POSTGRES_DB}
+      - KC_DB_PORT=5432
+      - KC_DB_DATABASE=${POSTGRES_DB}
+      - KC_DB_USER=${POSTGRES_USER}
+      - KC_DB_PASSWORD=${POSTGRES_PASSWORD}
+      - KEYCLOAK_ADMIN=${KEYCLOAK_ADMIN}
+      - KEYCLOAK_ADMIN_PASSWORD=${KEYCLOAK_ADMIN_PASSWORD}
+      - KC_HTTP_ENABLED=true
+      - KC_HTTPS_ENABLED=false
+      - KC_PROXY_HEADERS=xforwarded
+      - KC_HOSTNAME_STRICT=false
+      - PROXY_ADDRESS_FORWARDING=true
+    entrypoint: ["/bin/sh", "-c", "/opt/keycloak/bin/kc.sh build --db postgres && /opt/keycloak/bin/kc.sh start --optimized"]
+    depends_on:
+      - keycloak-postgres
+    volumes:
+      - /root/docker-static/keycloak-themes:/opt/keycloak/themes
+    networks:
+      - devops-lab_docker_network
+
+networks:
+  devops-lab_docker_network:
+    external: true

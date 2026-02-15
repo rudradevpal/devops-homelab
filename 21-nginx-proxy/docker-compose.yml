@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    ports:
+      - '80:80'
+      - '${HOST_LOCAL_IP}:81:81'
+      - '443:443'
+    volumes:
+      - /root/docker-storage/nginx/data:/data
+      - /root/docker-storage/nginx/letsencrypt:/etc/letsencrypt
+
+networks:
+  devops-lab_docker_network:
+    external: true

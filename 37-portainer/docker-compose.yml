@@ -1,0 +1,18 @@
+version: '3'
+
+services:
+  portainer:
+    container_name: portainer
+    image: portainer/portainer-ce:latest
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /root/docker-storage/portainer:/data
+    networks:
+      - devops-lab_docker_network
+    ports:
+      - "${HOST_LOCAL_IP}:9000:9000"
+
+networks:
+  devops-lab_docker_network:
+    external: true

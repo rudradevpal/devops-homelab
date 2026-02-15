@@ -1,0 +1,28 @@
+http:
+  routers:
+    homepage:
+      rule: Host(`apps.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: homepage-service
+
+    homepage-ssl:
+      rule: Host(`apps.{{env "HOST_DOMAIN"}}`)
+      service: homepage-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "oidc-forward-auth"
+        - "error_pages"
+        # - "internal_only"
+
+  services:
+    homepage-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.211:3000"

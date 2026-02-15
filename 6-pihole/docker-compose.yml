@@ -1,0 +1,21 @@
+version: "3"
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:latest
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    ports:
+      - "${HOST_LOCAL_IP}:53:53"
+      - "${HOST_LOCAL_IP}:53:53/udp"
+    environment:
+      - TZ=Asia/Kolkata
+      - WEBPASSWORD=${PIHOLE_WEB_PASSWORD}
+    volumes:
+      - '/root/docker-storage/pihole/pihole-config:/etc/pihole'
+      - '/root/docker-storage/pihole/dnsmasq-config:/etc/dnsmasq.d'
+
+networks:
+  devops-lab_docker_network:
+    external: true

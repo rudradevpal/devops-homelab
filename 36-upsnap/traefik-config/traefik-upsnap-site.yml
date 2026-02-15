@@ -1,0 +1,27 @@
+http:
+  routers:
+    upsnap-site:
+      rule: Host(`upsnap-site.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: upsnap-site-service
+
+    upsnap-site-ssl:
+      rule: Host(`upsnap-site.{{env "HOST_DOMAIN"}}`)
+      service: upsnap-site-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+  services:
+    upsnap-site-service:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.2.2:8090"

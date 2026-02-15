@@ -1,0 +1,11 @@
+[
+    {
+        "targets": [
+            "10.20.0.211:8080"
+        ],
+        "labels": {
+            "name": "devopslab-cloud-gateway-0-cloud-0"
+        }
+    }
+]
+

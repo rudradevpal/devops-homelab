@@ -1,0 +1,17 @@
+# Default Configuration
+http:
+  middlewares:
+    traefik-auth:
+      basicAuth:
+        users:
+          - "devops-lab:$apr1$NmWBVcSO$4q9WnkyZiLthNK5hH/Lco/"
+  routers:
+    traefik:
+      rule: Host(`traefik.{{env "HOST_DOMAIN"}}`)
+      service: api@internal
+      entryPoints:
+        - websecure
+      middlewares:
+        - "traefik-auth"
+      tls:
+        certResolver: letsencrypt-default-resolver

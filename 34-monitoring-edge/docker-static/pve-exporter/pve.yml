@@ -1,0 +1,5 @@
+default:
+    user: root@pam
+    password: DevOpsLab@12345
+    # Optional: set to false to skip SSL/TLS verification
+    verify_ssl: false

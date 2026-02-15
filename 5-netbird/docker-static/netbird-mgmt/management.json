@@ -1,0 +1,106 @@
+{
+  "Stuns": [
+    {
+      "Proto": "udp",
+      "URI": "stun:netbird.devopslab.in:3478",
+      "Username": "",
+      "Password": null
+    }
+  ],
+  "TURNConfig": {
+    "Turns": [
+      {
+        "Proto": "udp",
+        "URI": "turn:netbird.devopslab.in:3478",
+        "Username": "self",
+        "Password": "f2PgnAgKd45gqYb9Ip3Y1LjyPk2ChMtBu+s"
+      }
+    ],
+    "CredentialsTTL": "12h",
+    "Secret": "secret",
+    "TimeBasedCredentials": false
+  },
+  "Relay": {
+    "Addresses": [
+      "rel://netbird.devopslab.in:33080"
+    ],
+    "CredentialsTTL": "24h",
+    "Secret": "fzH+unHHyipWVCEq/o1rfhbeYA+f7N0WTG/jPfbNQKw"
+  },
+  "Signal": {
+    "Proto": "https",
+    "URI": "netbird.devopslab.in:443",
+    "Username": "",
+    "Password": null
+  },
+  "ReverseProxy": {
+    "TrustedHTTPProxies": [],
+    "TrustedHTTPProxiesCount": 0,
+    "TrustedPeers": [
+      "0.0.0.0/0"
+    ]
+  },
+  "Datadir": "",
+  "DataStoreEncryptionKey": "",
+  "StoreConfig": {
+    "Engine": "sqlite"
+  },
+  "HttpConfig": {
+    "Address": "0.0.0.0:443",
+    "AuthIssuer": "https://keycloak.devopslab.in/realms/devops-lab",
+    "AuthAudience": "netbird-client",
+    "AuthKeysLocation": "https://keycloak.devopslab.in/realms/devops-lab/protocol/openid-connect/certs",
+    "AuthUserIDClaim": "",
+    "CertFile": "",
+    "CertKey": "",
+    "IdpSignKeyRefreshEnabled": false,
+    "OIDCConfigEndpoint": "https://keycloak.devopslab.in/realms/devops-lab/.well-known/openid-configuration"
+  },
+  "IdpManagerConfig": {
+    "ManagerType": "keycloak",
+    "ClientConfig": {
+      "Issuer": "https://keycloak.devopslab.in/realms/devops-lab",
+      "TokenEndpoint": "https://keycloak.devopslab.in/realms/devops-lab/protocol/openid-connect/token",
+      "ClientID": "netbird-backend",
+      "ClientSecret": "MVnwzOcEIF1i4pJP2ssnkTmmh4oqiWa9",
+      "GrantType": "client_credentials"
+    },
+    "ExtraConfig": {
+      "AdminEndpoint": "https://keycloak.devopslab.in/admin/realms/devops-lab"
+    },
+    "Auth0ClientCredentials": null,
+    "AzureClientCredentials": null,
+    "KeycloakClientCredentials": null,
+    "ZitadelClientCredentials": null
+  },
+  "DeviceAuthorizationFlow": {
+    "Provider": "hosted",
+    "ProviderConfig": {
+      "Audience": "netbird-client",
+      "AuthorizationEndpoint": "",
+      "Domain": "",
+      "ClientID": "netbird-client",
+      "ClientSecret": "",
+      "TokenEndpoint": "https://keycloak.devopslab.in/realms/devops-lab/protocol/openid-connect/token",
+      "DeviceAuthEndpoint": "https://keycloak.devopslab.in/realms/devops-lab/protocol/openid-connect/auth/device",
+      "Scope": "openid",
+      "UseIDToken": false,
+      "RedirectURLs": null
+    }
+  },
+  "PKCEAuthorizationFlow": {
+    "ProviderConfig": {
+      "Audience": "netbird-client",
+      "ClientID": "netbird-client",
+      "ClientSecret": "",
+      "Domain": "",
+      "AuthorizationEndpoint": "https://keycloak.devopslab.in/realms/devops-lab/protocol/openid-connect/auth",
+      "TokenEndpoint": "https://keycloak.devopslab.in/realms/devops-lab/protocol/openid-connect/token",
+      "Scope": "openid profile email offline_access netbird-api",
+      "RedirectURLs": [
+        "http://localhost:53000"
+      ],
+      "UseIDToken": false
+    }
+  }
+}

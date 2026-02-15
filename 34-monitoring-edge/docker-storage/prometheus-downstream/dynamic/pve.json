@@ -1,0 +1,10 @@
+[
+    {
+        "targets": [
+            "172.25.2.200"
+        ],
+        "labels": {
+            "cluster": "pve-hyd"
+        }
+    }
+]

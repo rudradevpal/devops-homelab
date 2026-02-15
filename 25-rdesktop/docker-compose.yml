@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  rdesktop:
+    image: lscr.io/linuxserver/rdesktop:latest
+    container_name: rdesktop
+    security_opt:
+      - seccomp:unconfined
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Asia/Calcutta
+    networks:
+      - devops-lab_docker_network
+    ports:
+      - ${HOST_LOCAL_IP}:3389:3389
+    volumes:
+      - /root/docker-storage/rdesktop:/config
+    shm_size: "1gb"
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          cpus: '1'
+          memory: 2000m
+
+networks:
+  devops-lab_docker_network:
+    external: true

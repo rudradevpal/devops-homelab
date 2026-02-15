@@ -1,0 +1,27 @@
+http:
+  routers:
+    portainer-site:
+      rule: Host(`portainer-site.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: portainer-site-service
+
+    portainer-site-ssl:
+      rule: Host(`portainer-site.{{env "HOST_DOMAIN"}}`)
+      service: portainer-site-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+  services:
+    portainer-site-service:
+      loadBalancer:
+        servers:
+          - url: "http://172.25.2.2:9000"

@@ -1,0 +1,11 @@
+[
+    {
+        "targets": [
+            "172.25.2.2:8080"
+        ],
+        "labels": {
+            "name": "devopslab-edge-gateway-0-hyd"
+        }
+    }
+]
+

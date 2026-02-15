@@ -1,0 +1,18 @@
+---
+#- resources:
+#    cpu: true
+#    memory: true
+#    disk: /
+- greeting:
+    text_size: xl
+    text: DevOpsLab Apps
+
+#- search:
+#    provider: google
+#    target: _blank
+
+- datetime:
+    text_size: xl
+    format:
+        timeStyle: short
+        hourCycle: h12

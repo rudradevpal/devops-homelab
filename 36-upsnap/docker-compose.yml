@@ -1,0 +1,17 @@
+version: '3'
+
+services:
+  upsnap:
+    container_name: upsnap
+    image: ghcr.io/seriousm4x/upsnap:latest
+    network_mode: host
+    restart: always
+    environment:
+      - TZ=Asia/Kolkata
+    volumes:
+      - /root/docker-storage/upsnap:/app/pb_data
+    deploy:
+      resources:
+        limits:
+          cpus: '0.30'
+          memory: 300m

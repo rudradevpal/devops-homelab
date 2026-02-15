@@ -1,0 +1,20 @@
+version: '3.8'
+services:
+  guacamole:
+    container_name: guacamole
+    image: abesnier/guacamole
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    environment:
+      - TZ=Asia/Kolkata
+      - EXTENSIONS=auth-sso-openid
+      - GUACD_LOG_LEVEL=info
+    volumes:
+      - "/root/docker-storage/guacamole/config:/config"
+    ports:
+      - "${HOST_LOCAL_IP}:8082:8080"
+
+networks:
+  devops-lab_docker_network:
+    external: true

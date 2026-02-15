@@ -1,0 +1,27 @@
+http:
+  routers:
+    pdns:
+      rule: Host(`pdns.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: pdns-service
+
+    pdns-ssl:
+      rule: Host(`pdns.{{env "HOST_DOMAIN"}}`)
+      service: pdns-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+
+  services:
+    pdns-service:
+      loadBalancer:
+        servers:
+          - url: "http://pdns-ui:80"

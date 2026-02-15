@@ -1,0 +1,132 @@
+---
+- Networking:
+  - cloud-0-router-0:
+      icon: oracle-cloud.svg
+      description: ☁  MUMBAI
+      ping: 10.20.0.1
+  - cloud-1-router-0:
+      icon: oracle-cloud.svg
+      description: ☁  HYDERABAD
+      ping: 10.10.0.1
+  - kol-router-0:
+      href: http://172.25.1.1
+      icon: si-tplink-#4ACBD6
+      description: KOLKATA
+      ping: 172.25.1.1
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/tplink
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: http://172.25.1.1
+          username: devops-lab
+          hash: 32953c28e24d2c9d1f5f6b2093642b58fdd999c4fcf6>
+        mappings:
+          - field: vlans
+            label: VLANs
+            format: text
+          - field: dhcp_clients
+            label: DHCP Clients
+            format: text
+          - field: acls
+            label: Firewall Rules
+            format: text
+  - hyd-router-0:
+      href: http://172.25.2.1
+      icon: si-tplink-#4ACBD6
+      description: HYDERABAD
+      ping: 172.25.2.1
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/tplink
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: http://172.25.2.1
+          username: devops-lab
+          hash: 32953c28e24d2c9d1f5f6b2093642b58fdd999c4fcf6>
+        mappings:
+          - field: vlans
+            label: VLANs
+            format: text
+          - field: dhcp_clients
+            label: DHCP Clients
+            format: text
+          - field: acls
+            label: Firewall Rules
+            format: text
+  - PowerDNS:
+      href: https://pdns.devopslab.in
+      icon: powerdns.png
+      description: ☁  HYDERABAD
+      siteMonitor: https://pdns.devopslab.in
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/pdns
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: https://pdns.devopslab.in
+          token: YkR6SEhiNnFNM1Faa054
+        mappings:
+          - field: zones
+            label: Zones
+            format: text
+          - field: records
+            label: Records
+            format: text
+
+- Overlay and Proxy:
+  - Netbird:
+      href: https://netbird.devopslab.in
+      icon: netbird.png
+      description: ☁  HYDERABAD
+      siteMonitor: https://netbird.devopslab.in
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/netbird
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: https://netbird.devopslab.in
+          token: nbp_iawJqvmaoKsuo1ihH5UBsN9iwAhzGd3VLvFL
+        mappings:
+          - field: connected
+            label: Connected
+            format: text
+          - field: disconnected
+            label: Disconnected
+            format: text
+  - Traefik:
+      href: https://traefik.devopslab.in
+      icon: traefik-proxy.png
+      description: ☁  HYDERABAD
+      siteMonitor: https://traefik.devopslab.in
+      widget:
+        type: traefik
+        url: https://traefik.devopslab.in
+        username: devops-lab
+        password: DevOpsLab@12345
+  - Nginx Proxy Manager:
+      href: https://proxy.devopslab.in
+      icon: nginx-proxy-manager.png
+      description: ☁  MUMBAI
+      siteMonitor: https://proxy.devopslab.in
+      widget:
+        type: npm
+        url: https://proxy.devopslab.in
+        username: devops-lab@gmail.com
+        password: DevOpsLab@12345

@@ -1,0 +1,32 @@
+http:
+  routers:
+    pve-0-site:
+      rule: Host(`pve-0-site.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: pve-0-site-service
+
+    pve-0-site-ssl:
+      rule: Host(`pve-0-site.{{env "HOST_DOMAIN"}}`)
+      service: pve-0-site-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+  services:
+    pve-0-site-service:
+      loadBalancer:
+        serversTransport: insecure-skip
+        servers:
+          - url: "https://172.25.1.200:8006"
+
+  serversTransports:
+    insecure-skip:
+      insecureSkipVerify: true

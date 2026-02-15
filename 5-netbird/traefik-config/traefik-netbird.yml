@@ -1,0 +1,102 @@
+http:
+  routers:
+    netbird-dashboard:
+      rule: "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/`)"
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: netbird-dashboard-service
+
+    netbird-dashboard-ssl:
+      rule: "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/`)"
+      service: netbird-dashboard-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+
+    netbird-api:
+      rule: "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/api`)"
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: netbird-management-service
+
+    netbird-api-ssl:
+      rule: "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/api`)"
+      service: netbird-management-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+
+    netbird-management:
+      rule:  "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/management.ManagementService/`)"
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: netbird-management-grpc-service
+
+    netbird-management-ssl:
+      rule: "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/management.ManagementService/`)"
+      service: netbird-management-grpc-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+
+    netbird-signal:
+      rule:  "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/signalexchange.SignalExchange/`)"
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: netbird-signal-grpc-service
+
+    netbird-signal-ssl:
+      rule: "Host(`netbird.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/signalexchange.SignalExchange/`)"
+      service: netbird-signal-grpc-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+
+  services:
+    netbird-dashboard-service:
+      loadBalancer:
+        servers:
+          - url: "http://netbird-dashboard:80"
+
+    netbird-management-service:
+      loadBalancer:
+        servers:
+          - url: "http://netbird-management:443"
+
+    netbird-management-grpc-service:
+      loadBalancer:
+        servers:
+          - url: "h2c://netbird-management:443"
+
+    netbird-signal-grpc-service:
+      loadBalancer:
+        servers:
+          - url: "h2c://netbird-signal:80"

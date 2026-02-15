@@ -1,0 +1,73 @@
+version: "3.4"
+
+services:
+  netmaker:
+    container_name: netmaker
+    image: gravitl/netmaker:$SERVER_IMAGE_TAG
+    env_file: ./.env
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    volumes:
+      - /root/docker-storage/netmaker/dnsconfig:/root/config/dnsconfig
+      - /root/docker-storage/netmaker/sqldata:/root/data
+    environment:
+      - STUN_LIST=stun1.netmaker.io:3478,stun2.netmaker.io:3478,stun1.l.google.com:19302,stun2.l.google.com:19302=
+      - BROKER_ENDPOINT=wss://broker.${NM_DOMAIN}
+      - SERVER_NAME=${NM_DOMAIN}
+      - SERVER_API_CONN_STRING=api.${NM_DOMAIN}:443
+      - COREDNS_ADDR=${SERVER_HOST}
+      - SERVER_HTTP_HOST=api.${NM_DOMAIN}
+
+  netmaker-ui:
+    container_name: netmaker-ui
+    image: gravitl/netmaker-ui:$UI_IMAGE_TAG
+    env_file: ./.env
+    environment:
+      BACKEND_URL: "https://api.${NM_DOMAIN}"
+    depends_on:
+      - netmaker
+    links:
+      - "netmaker:api"
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+
+  netmaker-coredns:
+    container_name: netmaker-coredns
+    image: coredns/coredns:1.10.1
+    command: -conf /root/dnsconfig/Corefile
+    env_file: ./.env
+    depends_on:
+      - netmaker
+    restart: always
+    volumes:
+      - /root/docker-storage/netmaker/dnsconfig:/root/dnsconfig
+    ports:
+      - "53:53/tcp"
+      - "53:53/udp"
+    networks:
+      - devops-lab_docker_network
+
+  netmaker-mq:
+    container_name: netmaker-mq
+    image: eclipse-mosquitto:2.0.15-openssl
+    env_file: ./.env
+    depends_on:
+      - netmaker
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    command: [ "/mosquitto/config/wait.sh" ]
+    # ports:
+    #   - "127.0.0.1:1883:1883"
+    #   - "127.0.0.1:8883:8883"
+    volumes:
+      - /root/docker-static/netmaker-mosquitto/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - /root/docker-static/netmaker-mosquitto/wait.sh:/mosquitto/config/wait.sh
+      - /root/docker-storage/netmaker-mosquitto/mosquitto_logs:/mosquitto/log
+      - /root/docker-storage/netmaker-mosquitto/mosquitto_data:/mosquitto/data
+
+networks:
+  devops-lab_docker_network:
+    external: true

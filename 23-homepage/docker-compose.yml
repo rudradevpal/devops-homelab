@@ -1,0 +1,29 @@
+version: '3.8'
+services:
+  homepage:
+    container_name: homepage
+    image: ghcr.io/gethomepage/homepage:latest
+    environment:
+      - LOG_LEVEL=info
+    networks:
+      - devops-lab_docker_network
+    ports:
+      - "${HOST_LOCAL_IP}:3000:3000"
+    volumes:
+      - "/root/docker-storage/homepage/config:/app/config"
+      - "/root/docker-storage/homepage/images:/app/images"
+      - "/root/docker-storage/homepage/images:/app/icons"
+    restart: unless-stopped
+
+  homepage-extras:
+    container_name: homepage-extras
+    image: rudradevpal/homepage-extras:latest-arm
+    networks:
+      - devops-lab_docker_network
+    # ports:
+    #   - "${HOST_LOCAL_IP}:5001:5001"
+    restart: unless-stopped
+
+networks:
+  devops-lab_docker_network:
+    external: true

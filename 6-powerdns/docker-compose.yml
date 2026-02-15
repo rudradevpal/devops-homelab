@@ -1,0 +1,93 @@
+version: "3"
+services:
+  pdns-db:
+    container_name: pdns-db
+    image: mariadb:latest
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    volumes:
+      - /root/docker-storage/pdns-db:/var/lib/mysql
+
+  pdns-recursor:
+    container_name: pdns-recursor
+    hostname: pdns-recursor
+    image: pschiffe/pdns-recursor
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    depends_on:
+      - pdns
+    ports:
+      - "${HOST_LOCAL_IP}:53:53"
+      - "${HOST_LOCAL_IP}:53:53/udp"
+    environment:
+      - PDNS_forward_zones_recurse=${PARENT_DOMAIN}=10.1.254.254:5300, .=1.1.1.1
+      - PDNS_local_address=0.0.0.0
+      - PDNS_local_port=53
+      - PDNS_allow_from=0.0.0.0/0
+      - PDNS_dnssec=off
+      - PDNS_aggressive_nsec_cache_size=0
+      - PDNS_max_cache_entries=0
+      # Logging
+      - PDNS_logging_facility=0
+      - PDNS_quiet=no
+      - PDNS_loglevel=7
+      - PDNS_trace=yes
+      - PDNS_log_common-errors=yes
+
+  pdns:
+    container_name: pdns
+    hostname: pdns
+    image: pschiffe/pdns-mysql
+    restart: unless-stopped
+    networks:
+      devops-lab_docker_network:
+        ipv4_address: 10.1.254.254
+    depends_on:
+      - pdns-db
+    environment:
+      - PDNS_gmysql_host=pdns-db
+      - PDNS_gmysql_port=3306
+      - PDNS_gmysql_user=${MYSQL_USER}
+      - PDNS_gmysql_dbname=${MYSQL_DATABASE}
+      - PDNS_gmysql_password=${MYSQL_PASSWORD}
+      - PDNS_api=yes
+      - PDNS_api_key=${PDNS_api_key}
+      - PDNSCONF_API_KEY=${PDNSCONF_API_KEY}
+      - PDNS_webserver=yes
+      - PDNS_webserver-allow-from=0.0.0.0/0
+      - PDNS_webserver_address=0.0.0.0
+      - PDNS_webserver_password=${PDNS_webserver_password}
+      - PDNS_version_string=anonymous
+      - PDNS_default_ttl=1500
+      - PDNS_allow_notify_from=0.0.0.0
+      - PDNS_allow_axfr_ips=127.0.0.1
+      - PDNS_local_port=5300
+
+  pdns-ui:
+    image: powerdnsadmin/pda-legacy:latest
+    container_name: pdns-ui
+    depends_on:
+      - pdns-db
+    restart: unless-stopped
+    networks:
+      - devops-lab_docker_network
+    logging:
+      driver: json-file
+      options:
+        max-size: 50m
+    environment:
+      - SQLALCHEMY_DATABASE_URI=mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@pdns-db/${MYSQL_DATABASE}
+      - GUNICORN_TIMEOUT=60
+      - GUNICORN_WORKERS=2
+      - GUNICORN_LOGLEVEL=DEBUG
+
+networks:
+  devops-lab_docker_network:
+    external: true

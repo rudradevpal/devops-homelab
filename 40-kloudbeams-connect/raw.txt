@@ -1,0 +1,92 @@
+DevOpsLab Connect
+
+Flash Openwrt: https://firmware-selector.openwrt.org/?version=23.05.0&target=bcm27xx%2Fbcm2708&id=rpi
+
+Connect Monitor and keyboard and power on
+Run below commands
+	uci show wireless
+	uci set wireless.radio0.country='IN'
+	uci set wireless.radio0.disabled='0'
+	uci commit wireless
+	wifi reload
+
+
+vi /etc/config/firewall
+go to section
+config zone
+	option name		wan
+update option input to ACCEPT
+
+reboot
+
+Connect to Openwrt Wifi
+
+Go to UI http://192.168.1.1 and Login Username root password Not required
+
+Network Wireless - radio0 - Scan
+
+Join your Wifi
+
+Check Replace wireless configuration
+
+Submit
+
+Operating frequency Channel to auto
+
+Save Save and Apply
+
+Find out IP address through keyboard run below command
+
+ip r s
+
+opkg update
+
+opkg install kmod-usb-dwc2 kmod-usb-gadget-eth
+
+
+vi /boot/config.txt in the end add 
+dtoverlay=dwc2
+
+vi /etc/rc.local
+modprobe g_ether
+sleep 5
+exit 0
+
+Run below command
+modprobe g_ether
+
+Go to UI http://192.168.11.173 and Login Username root password Not required
+
+Go to network > inerfaces > edit lan interface
+select device usb0
+save
+
+save and apply
+
+Restart Lan interface
+
+System > Reboot
+
+ssh root@192.168.11.173
+opkg update
+opkg install kmod-wireguard netbird
+
+netbird up --management-url https://netbird.devopslab.in:443 --setup-key 9F544AA9-7A49-4658-83DD-6JUL89478E965
+
+/etc/init.d/netbird enable
+/etc/init.d/netbird start
+
+
+network > interfaces > add new interface
+Name: wt0
+Protocol: Unmanaged
+Device: wt0
+
+create interface
+
+Go to Firewall Settings Tab
+Select wan
+save
+save and apply
+
+System > reboot

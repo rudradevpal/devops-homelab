@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+  openldap:
+    container_name: openldap
+    image: osixia/openldap:latest
+    restart: unless-stopped
+    environment:
+      - LDAP_ORGANISATION=${LDAP_ORGANISATION}
+      - LDAP_DOMAIN=${LDAP_DOMAIN}
+      - LDAP_ADMIN_PASSWORD=${LDAP_ADMIN_PASSWORD}
+      - LDAP_CONFIG_PASSWORD=${LDAP_ADMIN_PASSWORD}
+      - LDAP_REMOVE_CONFIG_AFTER_SETUP=true
+      - LDAP_TLS_VERIFY_CLIENT=never
+    volumes:
+      - /root/docker-storage/openldap/data:/var/lib/ldap
+      - /root/docker-storage/openldap/config:/etc/ldap/slapd.d
+    ports:
+      - "${HOST_LOCAL_IP}:389:389"
+    networks:
+      - devops-lab_docker_network
+
+  phpldapadmin:
+    container_name: phpldapadmin
+    image: osixia/phpldapadmin:latest
+    restart: unless-stopped
+    environment:
+      - PHPLDAPADMIN_LDAP_HOSTS=openldap
+      - PHPLDAPADMIN_HTTPS=false
+    depends_on:
+      - openldap
+    networks:
+      - devops-lab_docker_network
+
+networks:
+  devops-lab_docker_network:
+    external: true

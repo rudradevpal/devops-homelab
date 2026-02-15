@@ -1,0 +1,328 @@
+---
+- Networking:
+  - Oracle VCN 0:
+      icon: oracle-cloud.svg
+      description: ☁  MUMBAI - router-0-cloud-0
+      ping: 10.20.0.1
+  - Oracle VCN 1:
+      icon: oracle-cloud.svg
+      description: ☁  HYDERABAD - router-0-cloud-1
+      ping: 10.10.0.58
+  - TL-R470T+:
+      href: http://172.25.1.1
+      icon: si-tplink-#4ACBD6
+      description: KOLKATA - router-0-kol
+      ping: 172.25.1.1
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/tplink
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: http://172.25.1.1
+          username: devops-lab
+          hash: 32953c28e2f2c20c32f006bf1d24c19f43ed23b120db9ba563c9b22fc2d2bea86fa7f86233a01b130314019d6c5b17370a99eb5b080488cf0183de02278fe90a4d010ca4d2c9d1f5f6b2093642b58fdd999c4fcf6853859aaa6939de85d1ae799881c1a1f5e3d55505875e6be
+        mappings:
+          - field: vlans
+            label: VLANs
+            format: text
+          - field: dhcp_clients
+            label: DHCP Clients
+            format: text
+          - field: acls
+            label: Firewall Rules
+            format: text
+  - TL-ER605:
+      href: http://172.25.2.1
+      icon: si-tplink-#4ACBD6
+      description: HYDERABAD - router-0-hyd
+      ping: 172.25.2.1
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/tplink
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: http://172.25.2.1
+          username: devops-lab
+          hash: 32953c28e2f2c20c32f006bf1d24c19f43ed23b120db9ba563c9b22fc2d2bea86fa7f86233a01b130314012eed2a02cd51fefcde14d7f15f50183de02278fe90a4d010ca4d2c9d1f5f6b2093642b58fdd999c4fcf6853859aaa6939de85d1ae799881c1a1f5e3d55505875e6be
+        mappings:
+          - field: vlans
+            label: VLANs
+            format: text
+          - field: dhcp_clients
+            label: DHCP Clients
+            format: text
+          - field: acls
+            label: Firewall Rules
+            format: text
+  - PowerDNS:
+      href: https://pdns.devopslab.in
+      icon: powerdns.png
+      description: ☁  HYDERABAD - pdns-cloud-1
+      siteMonitor: https://pdns.devopslab.in
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/pdns
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: https://pdns.devopslab.in
+          token: YkR6SEhiNn1Faa054
+        mappings:
+          - field: zones
+            label: Zones
+            format: text
+          - field: records
+            label: Records
+            format: text
+
+- Overlay and Proxy:
+  - Netbird:
+      href: https://netbird.devopslab.in
+      icon: netbird.png
+      description: ☁  HYDERABAD - netbird-cloud-1
+      siteMonitor: https://netbird.devopslab.in
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/netbird
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: https://netbird.devopslab.in
+          token: nbp_iawJsuo1ihH5UBsN9iwAhzGd3VLvFL
+        mappings:
+          - field: peers
+            label: Peers
+            format: text
+          - field: routes
+            label: Routes
+            format: text
+  - Traefik:
+      href: https://traefik.devopslab.in
+      icon: traefik-proxy.png
+      description: ☁  HYDERABAD - traefik-cloud-1
+      siteMonitor: https://traefik.devopslab.in
+      widget:
+        type: traefik
+        url: https://traefik.devopslab.in
+        username: devops-lab
+        password: DevOpsLab@12345
+  - Nginx Proxy Manager:
+      href: https://proxy.devopslab.in
+      icon: nginx-proxy-manager.png
+      description: ☁  MUMBAI - proxy-cloud-0
+      siteMonitor: https://proxy.devopslab.in
+      widget:
+        type: npm
+        url: https://proxy.devopslab.in
+        username: devops-lab@gmail.com
+        password: DevOpsLab@12345
+
+- Infrastructure and Storage:
+  - Proxmox VE PROD:
+      href: https://pve-0-kol.devopslab.in
+      icon: proxmox.png
+      description: KOLKATA - pve-0-kol
+      siteMonitor: https://pve-0-kol.devopslab.in
+      widget:
+        type: proxmox
+        url: https://pve-0-kol.devopslab.in
+        username: homepage@pam!homepage
+        password: 12b07bf7-6226-4c19-ac65-1781f43ac
+  - Proxmox VE DEV:
+      href: https://pve-0-hyd.devopslab.in
+      icon: proxmox.png
+      description: HYDERABD - pve-0-hyd
+      siteMonitor: https://pve-0-hyd.devopslab.in
+      widget:
+        type: proxmox
+        url: https://pve-0-hyd.devopslab.in
+        username: homepage@pam!homepage
+        password: 35242c3a-2afa-4321-8e8a-770c5aa3
+  - Synology Disk Station:
+      href: https://172.25.2.3:5001
+      icon: synology.png
+      description: HYDERABD - dsm-0-hyd
+      ping: 172.25.2.3
+      widget:
+        type: diskstation
+        url: https://172.25.2.3:5001
+        username: homepage
+        password: 56456Qex
+        #volume: volume_N
+  - TrueNAS Scale:
+      href: https://truenas-0-kol.devopslab.in
+      icon: truenas.png
+      description: KOLKATA - truenas-0-kol
+      siteMonitor: https://truenas-0-kol.devopslab.in
+      widget:
+        type: truenas
+        url: https://proxmox.host.or.ip:8006
+        username: user # not required if using api key
+        password: pass # not required if using api key
+        key: yourtruenasapikey # not required if using username / password
+        enablePools: true # optional, defaults to false
+        nasType: scale # defaults to scale, must be set to 'core' if using enablePools with TrueNAS Core
+
+- Management:
+  - Network UPS Tools:
+      icon: network-ups-tools.png
+      description: HYDERABAD - nut-hyd
+      ping: 172.25.2.2
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/nut
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          server: 172.25.2.2
+          port: 3493
+          ups: ups-0-hyd
+        mappings:
+          - field: state
+            label: Status
+            format: text
+          - field: charge
+            label: Charge
+            format: text
+          - field: load
+            label: Load
+            format: text
+          - field: voltage
+            label: Input
+            format: text
+  - Guacamole:
+      href: https://guacamole.devopslab.in
+      icon: guacamole.png
+      description: ☁  MUMBAI - guacamole-cloud-0
+      siteMonitor: https://guacamole.devopslab.in
+  - UpSnap:
+      href: https://upsnap-hyd.devopslab.in
+      icon: upsnap.png
+      description: HYDERABAD - upsnap-hyd
+      siteMonitor: https://upsnap-hyd.devopslab.in
+
+- Security and Identity:
+  - OpenLDAP:
+      href: https://ldap.devopslab.in
+      icon: phpldapadmin.png
+      description: ☁  HYDERABAD - ldap-cloud-1
+      siteMonitor: https://ldap.devopslab.in
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/ldap
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          server: 10.10.0.58
+          bind_user: cn=admin,dc=devopslab,dc=in
+          bind_password: DevOpsLab@12345
+          users_dn: ou=users,ou=devops-lab,dc=devopslab,dc=in
+          groups_dn: ou=groups,ou=devops-lab,dc=devopslab,dc=in
+          users_object_class: inetOrgPerson
+          groups_object_class: groupOfUniqueNames
+          users_attribute: cn
+          groups_attribute: cn
+        mappings:
+          - field: groups
+            label: Groups
+            format: text
+          - field: users
+            label: Users
+            format: short
+  - Keycloak:
+      href: https://keycloak.devopslab.in
+      icon: keycloak.png
+      description: ☁  HYDERABAD - keycloak-cloud-1
+      siteMonitor: https://keycloak.devopslab.in
+      widget:
+        type: customapi
+        url: http://homepage-extras:5001/keycloak
+        refreshInterval: 10000
+        method: POST
+        headers:
+          Content-Type: application/json
+          Accept: application/json
+        requestBody:
+          url: https://keycloak.devopslab.in
+          realm: devops-lab
+          client_id: homepage-extras
+          client_secret: Bove9WJ4Thm4XG5kFKgDIc
+        mappings:
+          - field: applications
+            label: Apps
+            format: text
+          - field: groups
+            label: Groups
+            format: short
+          - field: users
+            label: Users
+            format: short
+
+- Monitoring:
+  - Speedtest Tracker KOL:
+      href: https://speed-kol.devopslab.in
+      icon: speedtest-tracker.png
+      description: KOLKATA - speed-0-kol
+      ping: 172.25.1.2
+      widget:
+        type: speedtest
+        url: http://172.25.1.2:8888
+  - Speedtest Tracker HYD:
+      href: https://speed-hyd.devopslab.in
+      icon: speedtest-tracker.png
+      description: HYDERABAD - speed-0-hyd
+      ping: 172.25.2.2
+      widget:
+        type: speedtest
+        url: http://172.25.2.2:8888
+  - Uptime Kuma:
+      href: https://uptime.devopslab.in
+      icon: uptime-kuma.png
+      description: ☁  MUMBAI - uptime-cloud-0
+      siteMonitor: https://uptime.devopslab.in
+      widget:
+        type: uptimekuma
+        url: https://uptime.devopslab.in
+        slug: all
+  - Grafana:
+      href: https://grafana.devopslab.in
+      icon: grafana.png
+      description: ☁  MUMBAI - grafana-cloud-0
+      siteMonitor: https://grafana.devopslab.in
+      widget:
+        type: grafana
+        url: https://grafana.devopslab.in
+        username: devops-lab
+        password: DevOpsLab@12345
+  - Prometheus:
+      href: https://prometheus.devopslab.in
+      icon: prometheus.png
+      description: ☁  MUMBAI - prometheus-cloud-0
+      siteMonitor: https://prometheus.devopslab.in
+
+- Automation:
+  - Guacamole:
+      href: https://guacamole.devopslab.in
+      icon: guacamole.png
+      description: ☁  MUMBAI - guacamole-cloud-0
+      siteMonitor: https://guacamole.devopslab.in

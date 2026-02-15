@@ -1,0 +1,67 @@
+http:
+  routers:
+    keycloak:
+      rule: Host(`keycloak.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: keycloak-service
+
+    keycloak-ssl:
+      rule: Host(`keycloak.{{env "HOST_DOMAIN"}}`)
+      service: keycloak-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+
+    keycloak-admin:
+      rule: Host(`keycloak.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/admin`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: keycloak-service
+
+    keycloak-admin-ssl:
+      rule: Host(`keycloak.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/admin`)
+      service: keycloak-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+    
+    keycloak-master:
+      rule: Host(`keycloak.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/realms/master`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: keycloak-service
+
+    keycloak-master-ssl:
+      rule: Host(`keycloak.{{env "HOST_DOMAIN"}}`) && PathPrefix(`/realms/master`)
+      service: keycloak-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+  services:
+    keycloak-service:
+     loadBalancer:
+        servers:
+          - url: "http://keycloak:8080"

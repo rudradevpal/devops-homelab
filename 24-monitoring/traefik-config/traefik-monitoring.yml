@@ -1,0 +1,75 @@
+http:
+  routers:
+    grafana:
+      rule: Host(`grafana.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: grafana-service
+
+    grafana-ssl:
+      rule: Host(`grafana.{{env "HOST_DOMAIN"}}`)
+      service: grafana-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+    prometheus:
+      rule: Host(`prometheus.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: prometheus-service
+
+    prometheus-ssl:
+      rule: Host(`prometheus.{{env "HOST_DOMAIN"}}`)
+      service: prometheus-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+    uptime:
+      rule: Host(`uptime.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: uptime-service
+
+    uptime-ssl:
+      rule: Host(`uptime.{{env "HOST_DOMAIN"}}`)
+      service: uptime-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        - "internal_only"
+
+  services:
+    grafana-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.211:3030"
+    prometheus-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.211:9090"
+    uptime-service:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.0.211:3001"

@@ -1,0 +1,47 @@
+http:
+  middlewares:
+    internal_only:
+      ipAllowList:
+        sourceRange:
+          - "10.20.0.0/24"
+          - "100.111.0.0/16"
+          - "10.1.0.0/16"
+
+    force_https:
+      redirectScheme:
+        scheme: "https"
+
+    error_pages:
+      errors:
+        status:
+          - "403"
+          - "404"
+        service: "error-pages-service"
+        query: "/{status}.html"
+
+  routers:
+    error-pages:
+      rule: "HostRegexp(`.+`)"
+      priority: 1
+      entryPoints:
+        - web
+      middlewares:
+        - "error_pages"
+      service: "error-pages-service"
+
+    error-pages-ssl:
+      rule: "HostRegexp(`.+`)"
+      priority: 1
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+      service: "error-pages-service"
+
+  services:
+    error-pages-service:
+      loadBalancer:
+        servers:
+          - url: "http://error-pages:8080"

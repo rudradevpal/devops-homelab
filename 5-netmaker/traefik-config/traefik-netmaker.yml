@@ -1,0 +1,80 @@
+tcp:
+  routers:
+    netmaker-mq-ssl:
+      rule: HostSNI(`broker.netmaker.{{env "HOST_DOMAIN"}}`)
+      tls:
+        certResolver: letsencrypt-default-resolver
+      service: netmaker-mq-service
+      entryPoints:
+        - websecure
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+    
+    netmaker-mq:
+      rule: HostSNI(`broker.netmaker.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: netmaker-mq-service
+
+  services:
+    netmaker-mq-service:
+      loadBalancer:
+        servers:
+          - address: "netmaker-mq:8883"
+
+http:
+  routers:
+    netmaker-api-ssl:
+      rule: Host(`api.netmaker.{{env "HOST_DOMAIN"}}`)
+      service: netmaker-api-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+    
+    netmaker-api:
+      rule:  Host(`api.netmaker.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: netmaker-api-service
+
+    netmaker-dashboard-ssl:
+      rule: Host(`dashboard.netmaker.{{env "HOST_DOMAIN"}}`)
+      service: netmaker-dashboard-service
+      entryPoints:
+        - websecure
+      tls:
+        certResolver: letsencrypt-default-resolver
+      middlewares:
+        - "error_pages"
+        # - "internal_only"
+    
+    netmaker-dashboard:
+      rule:  Host(`dashboard.netmaker.{{env "HOST_DOMAIN"}}`)
+      entryPoints:
+        - web
+      middlewares:
+        - "force_https"
+        - "error_pages"
+      service: netmaker-dashboard-service
+
+  services:
+    netmaker-api-service:
+      loadBalancer:
+        servers:
+          - url: "http://netmaker:8081"
+
+    netmaker-dashboard-service:
+      loadBalancer:
+        servers:
+          - url: "http://netmaker-ui:80"

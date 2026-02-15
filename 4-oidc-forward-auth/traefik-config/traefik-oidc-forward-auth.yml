@@ -1,0 +1,7 @@
+http:
+  middlewares:
+    oidc-forward-auth:
+      forwardAuth:
+        address: "http://oidc-forward-auth:4181"
+        authResponseHeaders:
+          - X-Forwarded-User
